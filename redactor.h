@@ -6,6 +6,9 @@
 #include <ppm_image.h>
 #include <bmp_image.h>
 
+#include "dialogconvert.h"
+#include "converter.h"
+
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QDebug>
@@ -26,10 +29,16 @@ public:
     void getImage (QString fileName);
 private slots:
     void slotCustomMenuRequested(QPoint pos);
+
 private:
-    Ui::Redactor *ui;
+    Ui::Redactor *ui;    
+    DialogConvert dial_conv_;
+
     void SetImage();
     void ImageSobel();
+    void OpenConvertDialog();
+    void SetDialogOption();
+    QString file_name_{};
 
 };
 #endif // REDACTOR_H

@@ -24,6 +24,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}        
         img_lib.cpp img_lib.h
+        converter.h
+        dialogconvert.h dialogconvert.cpp dialogconvert.ui
 
     )
     

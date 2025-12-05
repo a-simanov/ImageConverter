@@ -38,6 +38,7 @@
      <string>Меню</string>
     </property>
     <addaction name="action_open_file"/>
+    <addaction name="action_convert"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -45,6 +46,11 @@
   <action name="action_open_file">
    <property name="text">
     <string>Открыть файл</string>
+   </property>
+  </action>
+  <action name="action_convert">
+   <property name="text">
+    <string>Конвертировать</string>
    </property>
   </action>
  </widget>
