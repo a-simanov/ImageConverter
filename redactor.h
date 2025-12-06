@@ -27,18 +27,21 @@ public:
     Redactor(QWidget *parent = nullptr);
     ~Redactor();
     void getImage (QString fileName);
+    void FitImage();
 private slots:
     void slotCustomMenuRequested(QPoint pos);
-
 private:
     Ui::Redactor *ui;    
     DialogConvert dial_conv_;
+    QString file_name_in_{};
+    QString file_name_out_{};
+    QPixmap active_pixmap_;
+    bool is = false;
 
     void SetImage();
     void ImageSobel();
     void OpenConvertDialog();
     void SetDialogOption();
-    QString file_name_{};
-
+    void resizeEvent(QResizeEvent *event) override;
 };
 #endif // REDACTOR_H

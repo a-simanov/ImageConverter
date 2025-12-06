@@ -22,8 +22,7 @@ set(PROJECT_SOURCES
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ImageRedactor
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}        
-        img_lib.cpp img_lib.h
+        ${PROJECT_SOURCES}
         converter.h
         dialogconvert.h dialogconvert.cpp dialogconvert.ui
 
