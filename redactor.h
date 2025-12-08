@@ -8,6 +8,7 @@
 
 #include "dialogconvert.h"
 #include "converter.h"
+#include "h_mirror.h"
 
 #include <QMainWindow>
 #include <QFileDialog>
@@ -26,7 +27,7 @@ class Redactor : public QMainWindow
 public:
     Redactor(QWidget *parent = nullptr);
     ~Redactor();
-    void getImage (QString fileName);
+    void getImage ();
     void FitImage();
 private slots:
     void slotCustomMenuRequested(QPoint pos);
@@ -37,11 +38,18 @@ private:
     QString file_name_out_{};
     QPixmap active_pixmap_;
     bool is = false;
+    img_lib::Image image_;
+    QString original_file_;
 
     void SetImage();
     void ImageSobel();
     void OpenConvertDialog();
     void SetDialogOption();
     void resizeEvent(QResizeEvent *event) override;
+    QString SetTempImage();
+    void HorizontalMirror();
+    void LoadImage();
+    void SaveFileAs ();
+    void SaveFile(std::string);
 };
 #endif // REDACTOR_H

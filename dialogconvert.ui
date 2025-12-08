@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="6,1,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="6,1">
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
@@ -47,13 +47,6 @@
          </widget>
         </item>
        </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="le_file_format">
-       <property name="text">
-        <string>Введите имя файла</string>
-       </property>
       </widget>
      </item>
      <item>

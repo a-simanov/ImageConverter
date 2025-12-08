@@ -12,6 +12,8 @@ Redactor::Redactor(QWidget *parent)
     connect(ui->action_open_file, &QAction::triggered, this, &Redactor::SetImage);
     connect(ui->action_convert, &QAction::triggered, this, &Redactor::OpenConvertDialog);
     connect(&dial_conv_, &DialogConvert::Convert, this, &Redactor::SetDialogOption);
+    connect(ui->action_horiz_mirror, &QAction::triggered, this, &Redactor::HorizontalMirror);
+    connect(ui->action_save_as, &QAction::triggered, this, &Redactor::SaveFileAs);
 }
 
 Redactor::~Redactor()
@@ -31,35 +33,21 @@ void Redactor::SetImage() {
         "Images (*.ppm *.bpm *.jpeg)"
         );
     active_pixmap_ = QPixmap(fileName);
-    this->setMinimumSize(50,50);
+    this->setMinimumSize(active_pixmap_.size() / 10);
     FitImage();
     file_name_in_ = fileName;
     ui->action_convert->setEnabled(true);
+    ui->action_horiz_mirror->setEnabled(true);
+    ui->action_save_as->setEnabled(true);
+    LoadImage();
 }
 
 void Redactor::slotCustomMenuRequested(QPoint pos) {
     ui->menu->popup(mapToGlobal(pos));
 }
 
-void Redactor::getImage (QString fileName) {
-    const ImageFormatInterface* in_interface = GetFormatInterface(fileName.toStdString());
-    if(!in_interface) {
-        cerr << "Unknown format of the input file"sv << endl;
-        return;
-    }
-    const ImageFormatInterface* out_interface = GetFormatInterface(file_name_in_.toStdString());
-    if (!out_interface) {
-        cerr << "Unknown format of the output file"sv << endl;
-        return;
-    }
-    img_lib::Image img = in_interface->LoadImage(fileName.toStdString());
-    if (!img) {
-        qWarning() << "Loading failed";
-    }
-    if (!out_interface->SaveImage(file_name_out_.toStdString(), img)) {
-        cerr << "Saving failed"sv << endl;
-        return;
-    }
+void Redactor::getImage () {
+    SaveFile(file_name_out_.toStdString());
     dial_conv_.close();
 }
 
@@ -79,7 +67,19 @@ void Redactor::getImage (QString fileName) {
 
 void Redactor::SetDialogOption() {
     file_name_out_ = dial_conv_.GetFileName();
-    getImage(file_name_in_);
+    getImage();
+}
+
+void Redactor::LoadImage() {
+    const ImageFormatInterface* in_interface = GetFormatInterface(file_name_in_.toStdString());
+    if(!in_interface) {
+        cerr << "Unknown format of the input file"sv << endl;
+        return;
+    }
+    image_ = in_interface->LoadImage(file_name_in_.toStdString());
+    if (!image_) {
+        qWarning() << "Loading failed";
+    }
 }
 
 void Redactor::FitImage() {
@@ -88,8 +88,8 @@ void Redactor::FitImage() {
     QPixmap temp = ResizeImgToFit(this->active_pixmap_, this->width(), this->height());
     ui->lbl_pixmap->setPixmap(temp);
     ui->lbl_pixmap->resize(temp.width(), temp.height());
-    int lbl_x = (this->width() - ui->lbl_pixmap->pixmap().width()) / 2;
-    int lbl_y = (this->height() - ui->lbl_pixmap->pixmap().height()) / 2;
+    int lbl_x = (this->width() - active_pixmap_.width()) / 2;
+    int lbl_y = (this->height() - active_pixmap_.height()) / 2;
     ui->lbl_pixmap->move(lbl_x, lbl_y);
     is = true;
 }
@@ -99,5 +99,48 @@ void Redactor::resizeEvent(QResizeEvent*)
     if(is) {
         FitImage();
     }
+}
+
+QString Redactor::SetTempImage() {
+    std::string tmp_file = file_name_in_.toStdString();
+    int pos = tmp_file.find_last_of('/');
+    tmp_file.insert(pos + 1, "tmp_");
+    SaveFile(tmp_file);
+    return QString::fromStdString(tmp_file);
+}
+
+void Redactor::HorizontalMirror () {
+    HMirrInplace(image_);
+    active_pixmap_ = QPixmap(SetTempImage());
+    FitImage();
+}
+
+void Redactor::SaveFile(std::string file) {
+    const ImageFormatInterface* out_interface = GetFormatInterface(file);
+    if (!out_interface) {
+        cerr << "Unknown format of the output file"sv << endl;
+        return;
+    }
+    if (!out_interface->SaveImage(file, image_)) {
+        cerr << "Saving failed"sv << endl;
+        return;
+    }
+}
+
+void Redactor::SaveFileAs () {
+    std::string tmp = file_name_in_.toStdString();
+    std::string format = tmp.substr(tmp.find('.'));
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        QString("Сохранить файл"),
+        QDir::currentPath(),
+        "Images (*.ppm *.bpm *.jpeg)"
+        );
+    if (fileName.contains('.')) {
+        SaveFile(fileName.toStdString());
+    } else {
+        SaveFile(fileName.toStdString() + format);
+    }
+
 }
 

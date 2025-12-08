@@ -15,19 +15,22 @@ DialogConvert::~DialogConvert()
 
 void DialogConvert::on_pb_convert_clicked()
 {
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        QString("Сохранить файл"),
+        QDir::currentPath(),
+        "Images (*.ppm *.bpm *.jpeg)"
+        );
+    if (ui->rb_BMP->isChecked()) {
+        out_file_name_ = fileName + ".bmp";
+    } else if (ui->rb_PPM->isChecked()) {
+        out_file_name_ = fileName + ".ppm";
+    } else {
+        out_file_name_ = fileName + ".jpeg";
+    }
     emit Convert();
 }
 
-QString DialogConvert::GetFileName(){
-    if (ui->le_file_format->text() == "") {
-        ui->le_file_format->setText("Введите имя файла");
-        return {};
-    }
-    if (ui->rb_BMP->isChecked()) {
-        return ui->le_file_format->text() + ".bmp";
-    } else if (ui->rb_PPM->isChecked()) {
-        return ui->le_file_format->text() + ".ppm";
-    }
-    return ui->le_file_format->text() + ".jpeg";
+QString DialogConvert::GetFileName() {
+    return out_file_name_;
 }
-

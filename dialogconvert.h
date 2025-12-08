@@ -2,6 +2,7 @@
 #define DIALOGCONVERT_H
 
 #include <QDialog>
+#include <QFileDialog>>
 
 namespace Ui {
 class DialogConvert;
@@ -22,7 +23,8 @@ private slots:
 signals:
     void Convert();
 private:
-    Ui::DialogConvert *ui;    
+    Ui::DialogConvert *ui;
+    QString out_file_name_;
 };
 
 #endif // DIALOGCONVERT_H

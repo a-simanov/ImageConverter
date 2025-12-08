@@ -39,6 +39,9 @@
     </property>
     <addaction name="action_open_file"/>
     <addaction name="action_convert"/>
+    <addaction name="action_horiz_mirror"/>
+    <addaction name="action_vert_mirror"/>
+    <addaction name="action_save_as"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -54,6 +57,30 @@
    </property>
    <property name="text">
     <string>Конвертировать</string>
+   </property>
+  </action>
+  <action name="action_horiz_mirror">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Отразить по горизонтали</string>
+   </property>
+  </action>
+  <action name="action_vert_mirror">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Отразить по вертикали</string>
+   </property>
+  </action>
+  <action name="action_save_as">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Сохранить файл как...</string>
    </property>
   </action>
  </widget>
