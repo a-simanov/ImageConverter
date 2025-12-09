@@ -27,6 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dialogconvert.h dialogconvert.cpp dialogconvert.ui
         sobel.cpp sobel.h
         h_mirror.h
+        v_mirror.h
 
     )
     

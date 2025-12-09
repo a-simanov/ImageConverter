@@ -9,6 +9,8 @@
 #include "dialogconvert.h"
 #include "converter.h"
 #include "h_mirror.h"
+#include "v_mirror.h"
+#include "sobel.h"
 
 #include <QMainWindow>
 #include <QFileDialog>
@@ -48,6 +50,8 @@ private:
     void resizeEvent(QResizeEvent *event) override;
     QString SetTempImage();
     void HorizontalMirror();
+    void VerticalMirror ();
+    void InvertColors ();
     void LoadImage();
     void SaveFileAs ();
     void SaveFile(std::string);

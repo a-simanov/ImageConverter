@@ -13,6 +13,8 @@ Redactor::Redactor(QWidget *parent)
     connect(ui->action_convert, &QAction::triggered, this, &Redactor::OpenConvertDialog);
     connect(&dial_conv_, &DialogConvert::Convert, this, &Redactor::SetDialogOption);
     connect(ui->action_horiz_mirror, &QAction::triggered, this, &Redactor::HorizontalMirror);
+    connect(ui->action_vert_mirror, &QAction::triggered, this, &Redactor::VerticalMirror);
+    connect(ui->action_sobel, &QAction::triggered, this, &Redactor::InvertColors);
     connect(ui->action_save_as, &QAction::triggered, this, &Redactor::SaveFileAs);
 }
 
@@ -38,6 +40,8 @@ void Redactor::SetImage() {
     file_name_in_ = fileName;
     ui->action_convert->setEnabled(true);
     ui->action_horiz_mirror->setEnabled(true);
+    ui->action_vert_mirror->setEnabled(true);
+    ui->action_sobel->setEnabled(true);
     ui->action_save_as->setEnabled(true);
     LoadImage();
 }
@@ -109,8 +113,20 @@ QString Redactor::SetTempImage() {
     return QString::fromStdString(tmp_file);
 }
 
+void Redactor::VerticalMirror () {
+    VMirrInplace(image_);
+    active_pixmap_ = QPixmap(SetTempImage());
+    FitImage();
+}
+
 void Redactor::HorizontalMirror () {
     HMirrInplace(image_);
+    active_pixmap_ = QPixmap(SetTempImage());
+    FitImage();
+}
+
+void Redactor::InvertColors () {
+    image_ = Sobel(image_);
     active_pixmap_ = QPixmap(SetTempImage());
     FitImage();
 }
