@@ -15,6 +15,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QDebug>
+#include <QFile>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,6 +32,7 @@ public:
     ~Redactor();
     void getImage ();
     void FitImage();
+    void DeleteTempFile ();
 private slots:
     void slotCustomMenuRequested(QPoint pos);
 private:
@@ -42,6 +44,7 @@ private:
     bool is = false;
     img_lib::Image image_;
     QString original_file_;
+    std::string tmp_file_;
 
     void SetImage();
     void ImageSobel();
@@ -53,6 +56,7 @@ private:
     void VerticalMirror ();
     void InvertColors ();
     void LoadImage();
+    void Save();
     void SaveFileAs ();
     void SaveFile(std::string);
 };

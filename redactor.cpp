@@ -15,6 +15,7 @@ Redactor::Redactor(QWidget *parent)
     connect(ui->action_horiz_mirror, &QAction::triggered, this, &Redactor::HorizontalMirror);
     connect(ui->action_vert_mirror, &QAction::triggered, this, &Redactor::VerticalMirror);
     connect(ui->action_sobel, &QAction::triggered, this, &Redactor::InvertColors);
+    connect(ui->action_save, &QAction::triggered, this, &Redactor::Save);
     connect(ui->action_save_as, &QAction::triggered, this, &Redactor::SaveFileAs);
 }
 
@@ -43,6 +44,7 @@ void Redactor::SetImage() {
     ui->action_vert_mirror->setEnabled(true);
     ui->action_sobel->setEnabled(true);
     ui->action_save_as->setEnabled(true);
+    ui->action_save->setEnabled(true);
     LoadImage();
 }
 
@@ -106,11 +108,11 @@ void Redactor::resizeEvent(QResizeEvent*)
 }
 
 QString Redactor::SetTempImage() {
-    std::string tmp_file = file_name_in_.toStdString();
-    int pos = tmp_file.find_last_of('/');
-    tmp_file.insert(pos + 1, "tmp_");
-    SaveFile(tmp_file);
-    return QString::fromStdString(tmp_file);
+    tmp_file_ = file_name_in_.toStdString();
+    int pos = tmp_file_.find_last_of('/');
+    tmp_file_.insert(pos + 1, "tmp_");
+    SaveFile(tmp_file_);
+    return QString::fromStdString(tmp_file_);
 }
 
 void Redactor::VerticalMirror () {
@@ -143,9 +145,23 @@ void Redactor::SaveFile(std::string file) {
     }
 }
 
+void Redactor::Save () {
+    //QFile::copy(QString::fromStdString(tmp_file_), file_name_in_);
+    QFile old_file (file_name_in_);
+    old_file.remove();
+    QFile file (QString::fromStdString(tmp_file_));
+    file.rename(file_name_in_);
+}
+
+void Redactor::DeleteTempFile () {
+    QFile tmp (QString::fromStdString(tmp_file_));
+    tmp.remove();
+    tmp_file_ = "";
+}
+
 void Redactor::SaveFileAs () {
-    std::string tmp = file_name_in_.toStdString();
-    std::string format = tmp.substr(tmp.find('.'));
+    std::string name_for_format = file_name_in_.toStdString();
+    std::string format = name_for_format.substr(name_for_format.find('.'));
     QString fileName = QFileDialog::getSaveFileName(
         this,
         QString("Сохранить файл"),
