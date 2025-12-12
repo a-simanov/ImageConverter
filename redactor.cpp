@@ -17,6 +17,8 @@ Redactor::Redactor(QWidget *parent)
     connect(ui->action_sobel, &QAction::triggered, this, &Redactor::InvertColors);
     connect(ui->action_save, &QAction::triggered, this, &Redactor::Save);
     connect(ui->action_save_as, &QAction::triggered, this, &Redactor::SaveFileAs);
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &Redactor::DeleteTempFile);
+
 }
 
 Redactor::~Redactor()
