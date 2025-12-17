@@ -44,6 +44,7 @@
     <addaction name="action_save_as"/>
     <addaction name="action_sobel"/>
     <addaction name="action_save"/>
+    <addaction name="actionter"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -99,6 +100,11 @@
    </property>
    <property name="text">
     <string>Сохранить</string>
+   </property>
+  </action>
+  <action name="actionter">
+   <property name="text">
+    <string>ter</string>
    </property>
   </action>
  </widget>

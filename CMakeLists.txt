@@ -28,6 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sobel.h
         h_mirror.h
         v_mirror.h
+        colors_changer.h
 
     )
     

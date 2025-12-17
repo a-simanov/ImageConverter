@@ -15,6 +15,7 @@ Redactor::Redactor(QWidget *parent)
     connect(ui->action_horiz_mirror, &QAction::triggered, this, &Redactor::HorizontalMirror);
     connect(ui->action_vert_mirror, &QAction::triggered, this, &Redactor::VerticalMirror);
     connect(ui->action_sobel, &QAction::triggered, this, &Redactor::InvertColors);
+    connect(ui->actionter, &QAction::triggered, this, &Redactor::ChangeImageColors);
     connect(ui->action_save, &QAction::triggered, this, &Redactor::Save);
     connect(ui->action_save_as, &QAction::triggered, this, &Redactor::SaveFileAs);
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &Redactor::DeleteTempFile);
@@ -131,6 +132,12 @@ void Redactor::HorizontalMirror () {
 
 void Redactor::InvertColors () {
     image_ = Sobel(image_);
+    active_pixmap_ = QPixmap(SetTempImage());
+    FitImage();
+}
+
+void Redactor::ChangeImageColors () {
+    ChangeColors(image_, 55, 55, 55);
     active_pixmap_ = QPixmap(SetTempImage());
     FitImage();
 }

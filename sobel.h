@@ -3,10 +3,7 @@
 #include "img_lib.h"
 
 #include <algorithm>
-#include <array>
 #include <cmath>
-#include <iostream>
-#include <string_view>
 
 using namespace std;
 

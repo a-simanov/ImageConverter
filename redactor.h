@@ -11,7 +11,7 @@
 #include "h_mirror.h"
 #include "v_mirror.h"
 #include "sobel.h"
-
+#include "colors_changer.h"
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QDebug>
@@ -48,6 +48,7 @@ private:
 
     void SetImage();
     void ImageSobel();
+    void ChangeImageColors ();
     void OpenConvertDialog();
     void SetDialogOption();
     void resizeEvent(QResizeEvent *event) override;
