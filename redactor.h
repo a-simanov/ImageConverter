@@ -12,6 +12,8 @@
 #include "v_mirror.h"
 #include "sobel.h"
 #include "colors_changer.h"
+#include "settings.h"
+
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QDebug>
@@ -45,6 +47,7 @@ private:
     img_lib::Image image_;
     QString original_file_;
     std::string tmp_file_;
+    settings settings_;
 
     void SetImage();
     void ImageSobel();
@@ -60,5 +63,6 @@ private:
     void Save();
     void SaveFileAs ();
     void SaveFile(std::string);
+    void ShowSettingsWindow();
 };
 #endif // REDACTOR_H

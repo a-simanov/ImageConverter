@@ -7,6 +7,7 @@ Redactor::Redactor(QWidget *parent)
 {
     ui->setupUi(this);
     ui->menubar->hide();
+    settings_.hide();
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &QMainWindow::customContextMenuRequested,this, &Redactor::slotCustomMenuRequested);
     connect(ui->action_open_file, &QAction::triggered, this, &Redactor::SetImage);
@@ -15,10 +16,11 @@ Redactor::Redactor(QWidget *parent)
     connect(ui->action_horiz_mirror, &QAction::triggered, this, &Redactor::HorizontalMirror);
     connect(ui->action_vert_mirror, &QAction::triggered, this, &Redactor::VerticalMirror);
     connect(ui->action_sobel, &QAction::triggered, this, &Redactor::InvertColors);
-    connect(ui->actionter, &QAction::triggered, this, &Redactor::ChangeImageColors);
+    connect(ui->action_settings, &QAction::triggered, this, &Redactor::ShowSettingsWindow);
     connect(ui->action_save, &QAction::triggered, this, &Redactor::Save);
     connect(ui->action_save_as, &QAction::triggered, this, &Redactor::SaveFileAs);
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &Redactor::DeleteTempFile);
+    connect(&settings_, &settings::GetSettings, this, &Redactor::ChangeImageColors);
 
 }
 
@@ -48,6 +50,7 @@ void Redactor::SetImage() {
     ui->action_sobel->setEnabled(true);
     ui->action_save_as->setEnabled(true);
     ui->action_save->setEnabled(true);
+    ui->action_settings->setEnabled(true);
     LoadImage();
 }
 
@@ -137,7 +140,9 @@ void Redactor::InvertColors () {
 }
 
 void Redactor::ChangeImageColors () {
-    ChangeColors(image_, 55, 55, 55);
+    int diff_brightness = settings_.GetBrightness();
+    qDebug() << diff_brightness;
+    ChangeColors(image_, diff_brightness, diff_brightness, diff_brightness);
     active_pixmap_ = QPixmap(SetTempImage());
     FitImage();
 }
@@ -155,7 +160,6 @@ void Redactor::SaveFile(std::string file) {
 }
 
 void Redactor::Save () {
-    //QFile::copy(QString::fromStdString(tmp_file_), file_name_in_);
     QFile old_file (file_name_in_);
     old_file.remove();
     QFile file (QString::fromStdString(tmp_file_));
@@ -183,5 +187,9 @@ void Redactor::SaveFileAs () {
         SaveFile(fileName.toStdString() + format);
     }
 
+}
+
+void Redactor::ShowSettingsWindow() {
+    settings_.show();
 }
 

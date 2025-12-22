@@ -29,6 +29,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         h_mirror.h
         v_mirror.h
         colors_changer.h
+        settings.h settings.cpp settings.ui
+
 
     )
     
